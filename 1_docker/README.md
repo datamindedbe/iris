@@ -22,13 +22,13 @@ You can either install docker on your local machine or use the online IDE [gitpo
 
 ### Running a container from an existing imange
 
-1. Run a container, execute a single command and delete the container after `docker run -rm ubuntu:focal pwd`
-2. Run a container in interactive mode and delete the container after `docker run -ti -rm ubuntu:focal /bin/bash` (Tip: type `exit` to terminate)
-3. Run a container in the background with a service, expose a port and delete the container when stopped `docker run --rm -d -p 8080:80 --name wordpress wordpress`
+1. Run a container, execute a single command and delete the container after `docker run --rm ubuntu:focal echo "Hello"`
+2. Run a container in interactive mode and delete the container after `docker run -ti --rm ubuntu:focal /bin/bash` (Tip: type `exit` to terminate)
+3. Run a container in the background with a service and expose a port on the host machine`docker run -d -p 8080:80 --name wordpress wordpress`
 4. List running containers `docker container ls`
 5. List the logs of a container `docker container logs --tail 100 wordpress`
-4. Stop a container with SIGTERM `docker container stop wordpress` or with SIGKILL `docker container kill wordpress`
-4. Remove a container `docker container rm wordpress`
+6. Stop a container with SIGTERM `docker container stop wordpress` or with SIGKILL `docker container kill wordpress`
+7. Remove a container `docker container rm wordpress`
 
 ### Building your own container image
 
