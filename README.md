@@ -4,6 +4,10 @@
 
 Artifacts related to a training on running stream processing pipelines
 
+## Prerequisites
+
+1. Github account (free)
+
 ## Trainings
 
 1. docker
