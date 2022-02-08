@@ -1,0 +1,8 @@
+{
+    "AUTHOR": "Nathan Derave",
+    "LIST_OF_COURSES": [
+        "Introduction to Git",
+        "Introduction to Linux & Bash",
+        "Containerization with Docker"
+    ]
+}

@@ -32,5 +32,12 @@ You can either install docker on your local machine or use the online IDE [gitpo
 
 ### Building your own container image
 
+1. Build the greeter_shell image `docker build -t greeter_shell:latest`
+2. Run the greeter_shell image `docker run greeter_shell:latest`
+3. Build the greeter_python image `docker build -t greeter_python:latest`
+4. Run the greeter_python image `docker run --expose 1994:8080 greeter_python:latest`
+5. Run the greeter_python image `docker run --expose --volume /TODO/config:/repo/config 1994:8080 greeter_python:latest`
 
 ### Using docker compose to start multiple services and allow them to communicate 
+
+1. Run wordpress by using `docker-compose up -d`
