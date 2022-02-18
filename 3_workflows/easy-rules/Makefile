@@ -1,3 +1,5 @@
+.PHONY: build
+
 build:
 	gradle wrapper
 	./gradlew build

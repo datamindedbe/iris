@@ -3,6 +3,10 @@ ports:
     onOpen: notify
 image:
   file: .gitpod.Dockerfile
+tasks:
+  - name: setup
+    init: |
+        sudo chmod -R 777 3_workflows/airflow/workspace
 github:
   prebuilds:
     master: true

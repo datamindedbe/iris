@@ -17,6 +17,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:1.7.30")
     implementation("org.jeasy:easy-rules-core:4.1.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.+")
+    implementation("com.rabbitmq:amqp-client:5.9.0")
 }
 
 tasks.test {
