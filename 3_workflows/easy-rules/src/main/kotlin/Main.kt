@@ -24,16 +24,7 @@ fun main(args: Array<String>) {
     }).start();
 
     // define rules
-//    val workflowRule: Rule = RuleBuilder()
-//        .name("workflow rule")
-//        .`when`(itIsHot())
-//        .then(triggerSequenceWorkflow())
-//        .`else`(triggerParallelWorkflow())
-//        .build()
-//    val rules = Rules(workflowRule)
     val rules: Rules  = Rules(HotRule(), ColdRule())
-//    rules.register(Hotrule())
-//    rules.register(Coldrule())
     val rulesEngine: RulesEngine = InferenceRulesEngine()
     rulesEngine.fire(rules, facts)
 }
