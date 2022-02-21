@@ -1,4 +1,3 @@
-import HighTemperatureCondition.Companion.itIsHot
 import org.apache.log4j.BasicConfigurator
 import org.jeasy.rules.api.Facts
 import org.jeasy.rules.api.Rule
