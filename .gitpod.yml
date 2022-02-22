@@ -1,0 +1,19 @@
+ports:
+  - port: 8080 # airflow UI
+    onOpen: notify
+image:
+  file: .gitpod.Dockerfile
+tasks:
+  - name: setup
+    init: |
+        sudo chmod -R 777 3_workflows/airflow/workspace
+        sudo chmod -R 777 3_workflows/rabbitmq/workspace
+github:
+  prebuilds:
+    master: true
+    branches: true
+    pullRequests: true
+    pullRequestsFromForks: true
+    addCheck: false
+    addComment: false
+    addBadge: true
