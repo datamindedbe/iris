@@ -11,3 +11,4 @@ Artifacts related to a training on running stream processing pipelines
 ## Trainings
 
 1. docker
+2. workflow management and rules engine
