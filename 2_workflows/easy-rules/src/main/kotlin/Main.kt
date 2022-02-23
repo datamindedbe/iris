@@ -11,7 +11,7 @@ import com.rabbitmq.client.DeliverCallback
 import com.rabbitmq.client.Delivery
 import java.nio.charset.StandardCharsets
 
-fun main(args: Array<String>) {
+fun main() {
     BasicConfigurator.configure();
 
     // define facts
