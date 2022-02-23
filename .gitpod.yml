@@ -6,8 +6,9 @@ image:
 tasks:
   - name: setup
     init: |
-        sudo chmod -R 777 2_workflows/airflow/workspace
-        sudo chmod -R 777 2_workflows/rabbitmq/workspace
+      mkdir 2_workflows/airflow/workspace/logs 2_workflows/airflow/workspace/plugins
+      sudo chmod -R 777 2_workflows/airflow/workspace
+      sudo chmod -R 777 2_workflows/rabbitmq/workspace
 github:
   prebuilds:
     master: true
