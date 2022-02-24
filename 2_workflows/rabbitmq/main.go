@@ -59,7 +59,7 @@ func main() {
 				// If there is an error publishing the message, a log will be displayed in the terminal.
 				failOnError(err, "Failed to publish a message")
 				log.Printf(" [x] Sending temperature: %s", temp)
-				time.Sleep(10 * time.Second)
+				time.Sleep(30 * time.Second)
 			}
 			return nil
 		},
