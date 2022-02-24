@@ -15,6 +15,7 @@ In this example we will have a producer publishe messages on an event bus (rabbi
 cd airflow
 docker-compose up
 ```
+username:password = airflow:airflow
 
 ### Rules engine
 
