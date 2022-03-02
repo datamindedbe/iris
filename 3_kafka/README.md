@@ -12,11 +12,11 @@ In this example we will produce messages to a Kafka topic and consume the messag
 #### Setting up Kafka broker and Zookeeper
 ```bash
 cd broker
-docker-compose up -d
+docker-compose up
 ```
 
 ## Exercises
-1) Use the Kafka CLI (available in the path (eg: kafka-topics.sh --list --zookeeper localhost:2181):
+1) Use the Kafka CLI (available in the path (eg: kafka-topics.sh --list --bootstrap-server localhost:9092):
    1) Create new topic called 'my-events'
    2) Produce some messages using the 'kafka-console-producer'
    3) Consume the messages using the 'kafka-console-producer'

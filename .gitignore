@@ -3,3 +3,5 @@ gradle/
 .gradle/
 logs/
 workspace/rabbitmq/
+.idea
+target
