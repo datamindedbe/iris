@@ -7,8 +7,9 @@
       <excludeFolder url="file://$MODULE_DIR$/3_workflows/easy-rules/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/3_workflows/easy-rules/build" />
       <excludeFolder url="file://$MODULE_DIR$/3_workflows/easy-rules/gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="Python 3.8 (iris)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
