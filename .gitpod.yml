@@ -1,6 +1,12 @@
 ports:
   - port: 8080 # airflow UI
     onOpen: notify
+  - port: 2181 # zookeeper
+    onOpen: notify
+  - port: 9092 # kafka
+    onOpen: notify
+  - port: 9101 # kafka jmx
+    onOpen: notify
 image:
   file: .gitpod.Dockerfile
 tasks:
@@ -9,6 +15,10 @@ tasks:
       mkdir 2_workflows/airflow/workspace/mount/logs 2_workflows/airflow/workspace/mount/plugins
       sudo chmod -R 777 2_workflows/airflow/workspace
       sudo chmod -R 777 2_workflows/rabbitmq/workspace
+      wget https://dlcdn.apache.org/kafka/3.1.0/kafka_2.13-3.1.0.tgz -P 3_kafka/cli
+      tar -xzf 3_kafka/cli/kafka_2.13-3.1.0.tgz
+      export PATH="/workspace/iris/3_kafka/cli/kafka_2.13-3.1.0/bin:$PATH"
+      sudo chmod -R 777 3_kafka/workspace
 github:
   prebuilds:
     master: true

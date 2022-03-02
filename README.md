@@ -12,3 +12,4 @@ Artifacts related to a training on running stream processing pipelines
 
 1. docker
 2. workflow management and rules engine
+3. kafka
