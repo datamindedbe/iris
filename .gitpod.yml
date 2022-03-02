@@ -16,7 +16,7 @@ tasks:
       sudo chmod -R 777 2_workflows/airflow/workspace
       sudo chmod -R 777 2_workflows/rabbitmq/workspace
       wget https://dlcdn.apache.org/kafka/3.1.0/kafka_2.13-3.1.0.tgz -P 3_kafka/cli
-      tar -xzf 3_kafka/cli/kafka_2.13-3.1.0.tgz
+      tar -xzf 3_kafka/cli/kafka_2.13-3.1.0.tgz --directory 3_kafka/cli
       export PATH="/workspace/iris/3_kafka/cli/kafka_2.13-3.1.0/bin:$PATH"
       sudo chmod -R 777 3_kafka/workspace
 github:
