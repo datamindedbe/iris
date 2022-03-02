@@ -5,3 +5,5 @@ logs/
 workspace/rabbitmq/
 .idea
 target
+venv
+*.iml
