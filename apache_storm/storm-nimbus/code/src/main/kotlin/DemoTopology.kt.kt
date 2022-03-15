@@ -3,17 +3,9 @@ package tutorial
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.PropertyAccessor
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.storm.Config
 import org.apache.storm.StormSubmitter
 import org.apache.storm.bolt.JoinBolt
-import org.apache.storm.kafka.bolt.KafkaBolt
-import org.apache.storm.kafka.bolt.mapper.FieldNameBasedTupleToKafkaMapper
-import org.apache.storm.kafka.bolt.selector.DefaultTopicSelector
-import org.apache.storm.kafka.spout.KafkaSpout
-import org.apache.storm.kafka.spout.KafkaSpoutConfig
 import org.apache.storm.spout.SpoutOutputCollector
 import org.apache.storm.task.OutputCollector
 import org.apache.storm.task.TopologyContext
@@ -38,41 +30,23 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-fun writeFilteredFile(tuple: Tuple): List<Any> {
-    val operations = tuple.getIntegerByField("operation")
-    val timestamp = tuple.getLongByField("timestamp")
-    return listOf(
-        operations, timestamp
-    )
-}
-
-object NumberTopology {
+object DemoTopology {
     @kotlin.Throws(Exception::class)
     @JvmStatic
     fun main(args: Array<String?>?) {
         val builder = TopologyBuilder()
 
-        builder.setSpout(
-            "kafka_spout", KafkaSpout(
-                KafkaSpoutConfig.builder("kafka:9092", "input-topic")
-                    .setProp(ConsumerConfig.GROUP_ID_CONFIG, "storm-kafka-group")
-                    .build()
-            ), 1
-        )
+        val random = RandomNumberSpout()
+        builder.setSpout("randomNumberSpout", random)
 
-        val kafkanumberBolt: KafkaNumberBolt = KafkaNumberBolt()
-        builder.setBolt("kafka_number_bolt", kafkanumberBolt)
-            .shuffleGrouping("kafka_spout")
 
         val filtering: FilteringBolt = FilteringBolt()
         builder.setBolt("filteringBolt", filtering)
-            .shuffleGrouping("kafka_number_bolt")
+            .shuffleGrouping("randomNumberSpout")
 
         val aggregating1: BaseWindowedBolt? = AggregatingBolt()
-//            .withTimestampField("timestamp")
+            .withTimestampField("timestamp")
             .withTumblingWindow(BaseWindowedBolt.Duration(5, TimeUnit.SECONDS))
-//            .withLag(BaseWindowedBolt.Duration.seconds(1))
-//            .withWindow(BaseWindowedBolt.Duration.seconds(5))
 
         builder.setBolt("aggregatingBolt1", aggregating1)
             .shuffleGrouping("filteringBolt")
@@ -93,35 +67,11 @@ object NumberTopology {
             .fieldsGrouping("aggregatingBolt1", Fields("key"))
             .fieldsGrouping("aggregatingBolt2", Fields("key"))
 
-        val kafkaProps = Properties()
-        kafkaProps["bootstrap.servers"] = "kafka:9092"
-        kafkaProps["acks"] = "1"
-        kafkaProps["key.serializer"] = "org.apache.kafka.common.serialization.StringSerializer"
-        kafkaProps["value.serializer"] = "org.apache.kafka.common.serialization.StringSerializer"
-
-        val kafkaOutputBolt = KafkaBolt<Any?, Any?>()
-            .withProducerProperties(kafkaProps)
-            .withTopicSelector(DefaultTopicSelector("output-topic"))
-            .withTupleToKafkaMapper(FieldNameBasedTupleToKafkaMapper())
-        builder.setBolt("forwardToKafka", kafkaOutputBolt, 2).shuffleGrouping("joinBolt")
-
-        builder.setSpout(
-            "kafka_spout_2", KafkaSpout(
-                KafkaSpoutConfig.builder("kafka:9092", "output-topic")
-                    .setProp(ConsumerConfig.GROUP_ID_CONFIG, "storm-kafka-group")
-                    .build()
-            ), 1
-        )
 
         val filePath = "/data/output.txt"
-        val file: FileWritingBolt = FileWritingBolt(filePath)
+        val file = FileWritingBolt(filePath)
         builder.setBolt("fileBolt", file)
             .shuffleGrouping("joinBolt")
-
-        val filePath2 = "/data/output2.txt"
-        val file2: FileWritingBolt = FileWritingBolt(filePath2)
-        builder.setBolt("fileBolt2", file2)
-            .shuffleGrouping("kafka_spout_2")
 
         // Create a config object.
         val conf = Config()
@@ -131,28 +81,6 @@ object NumberTopology {
 
         conf.setNumWorkers(3)
         StormSubmitter.submitTopology("number-topology", conf, builder.createTopology())
-    }
-
-    class KafkaNumberBolt : BaseBasicBolt() {
-        data class InputMessage(
-            var number: Int
-        )
-
-        override fun execute(tuple: Tuple, basicOutputCollector: BasicOutputCollector) {
-            print(tuple)
-
-            val operation = jacksonObjectMapper().readValue<InputMessage>(tuple.getStringByField("value"))
-            val output = listOf(
-                operation.number, System.currentTimeMillis()
-            )
-            basicOutputCollector.emit(output)
-
-
-        }
-
-        override fun declareOutputFields(outputFieldsDeclarer: OutputFieldsDeclarer) {
-            outputFieldsDeclarer.declare(Fields("operation", "timestamp"))
-        }
     }
 
     class RandomNumberSpout : BaseRichSpout() {

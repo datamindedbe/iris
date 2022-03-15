@@ -17,7 +17,10 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
     compileOnly("org.apache.storm:storm-core:2.3.0")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.0.1")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.1")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
+    implementation("org.apache.storm:storm-kafka-client:2.3.0")
+    implementation("org.apache.kafka:kafka-clients:3.1.0")
 }
 
 tasks.test {

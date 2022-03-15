@@ -1,0 +1,77 @@
+version: "3.8"
+
+services:
+  zookeeper:
+    image: zookeeper
+    # Keep it running.
+    tty: true
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - 22181:2181
+
+  storm-nimbus:
+    build: ./storm-nimbus
+    links:
+      - zookeeper
+    tty: true
+    ports:
+      - 6627:6627
+    volumes:
+      - ./storm-nimbus/conf:/conf
+      - ./storm-nimbus/data:/apache-storm-2.3.0/data
+      - ./storm-nimbus/logs:/apache-storm-2.3.0/logs
+
+  storm-supervisor:
+    build: ./storm-supervisor
+    links:
+      - zookeeper
+      - storm-nimbus
+    tty: true
+    command: storm supervisor -c worker.heap.memory.mb=65536 -c supervisor.memory.capacity.mb=262144 -c worker.profiler.enabled=true
+    volumes:
+      - ./storm-supervisor/conf:/conf
+      - ./storm-supervisor/data:/data
+      - ./storm-supervisor/logs:/apache-storm-2.3.0/logs
+
+  storm-ui:
+    build: ./storm-ui
+    container_name: storm-ui
+    command: storm ui
+    depends_on:
+      - storm-nimbus
+      - zookeeper
+    links:
+      - storm-nimbus
+      - zookeeper
+    restart: always
+    volumes:
+      - ./storm-ui/conf:/conf
+    ports:
+      - 8080:8080
+
+#  kafka:
+#    image: confluentinc/cp-kafka:latest
+#    container_name: kafka-broker
+#    depends_on:
+#      - zookeeper
+#    ports:
+#      - 29092:29092
+#    environment:
+#      KAFKA_BROKER_ID: 1
+#      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+#      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+#  kafka-producer:
+#    build: ./kafka-producer
+#    restart: always
+#    depends_on:
+#      - kafka
+
+
+    # Host volume used to store our code on the master node (Nimbus).
+#volumes:
+#  storm-nimbus:
