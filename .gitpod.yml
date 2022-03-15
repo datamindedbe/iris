@@ -9,6 +9,7 @@ tasks:
       mkdir 2_workflows/airflow/workspace/mount/logs 2_workflows/airflow/workspace/mount/plugins
       sudo chmod -R 777 2_workflows/airflow/workspace
       sudo chmod -R 777 2_workflows/rabbitmq/workspace
+      sudo chmod -R 777 apache_storm
 github:
   prebuilds:
     master: true
