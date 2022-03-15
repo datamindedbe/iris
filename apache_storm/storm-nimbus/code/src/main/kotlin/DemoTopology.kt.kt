@@ -46,13 +46,13 @@ object DemoTopology {
 
         val aggregating1: BaseWindowedBolt? = AggregatingBolt()
             .withTimestampField("timestamp")
-            .withTumblingWindow(BaseWindowedBolt.Duration(5, TimeUnit.SECONDS))
+            .withTumblingWindow(BaseWindowedBolt.Duration(1000, TimeUnit.MILLISECONDS))
 
         builder.setBolt("aggregatingBolt1", aggregating1)
             .shuffleGrouping("filteringBolt")
 
         val aggregating2: BaseWindowedBolt? = AggregatingBolt()
-            .withTumblingWindow(BaseWindowedBolt.Duration(10, TimeUnit.SECONDS))
+            .withTumblingWindow(BaseWindowedBolt.Duration(500, TimeUnit.MILLISECONDS))
         builder.setBolt("aggregatingBolt2", aggregating2)
             .shuffleGrouping("filteringBolt")
 
@@ -60,7 +60,7 @@ object DemoTopology {
             .join("aggregatingBolt2", "key", "aggregatingBolt1")
             .select("aggregatingBolt1:key, aggregatingBolt1:sumOfOperations, aggregatingBolt2:sumOfOperations")
             .withTumblingWindow(
-                BaseWindowedBolt.Duration(10, TimeUnit.SECONDS)
+                BaseWindowedBolt.Duration(5, TimeUnit.SECONDS)
             )
 
         builder.setBolt("joinBolt", joinBolt, 1)
@@ -80,7 +80,7 @@ object DemoTopology {
         conf.setDebug(true)
 
         conf.setNumWorkers(3)
-        StormSubmitter.submitTopology("number-topology", conf, builder.createTopology())
+        StormSubmitter.submitTopology("demo-topology", conf, builder.createTopology())
     }
 
     class RandomNumberSpout : BaseRichSpout() {
@@ -97,7 +97,7 @@ object DemoTopology {
 
         override fun nextTuple() {
             Utils.sleep(10)
-            outputCollector!!.emit(Values(random?.nextInt(), System.currentTimeMillis()))
+            outputCollector!!.emit(Values(random?.nextInt(100), System.currentTimeMillis()))
         }
 
         override fun declareOutputFields(outputFieldsDeclarer: OutputFieldsDeclarer) {
@@ -140,7 +140,7 @@ object DemoTopology {
                 .sum()
 //            val beginningTimestamp = getTimestamp(tuples[0])
 //            val endTimestamp = getTimestamp(tuples[tuples.size - 1])
-            val list = listOf("key1", "key2", "key3", "key4", "key5")
+            val list = listOf("key1", "key2", "key3")
             val randomIndex = Random().nextInt(list.size);
             val randomKey = list[randomIndex]
             val values = Values(sumOfOperations, randomKey)

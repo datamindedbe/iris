@@ -2,7 +2,7 @@ build/
 gradle/
 .gradle/
 logs/
-storm-supervisor/data
+storm-supervisor/data/
 workspace/rabbitmq/
 gradlew
 gradlew.bat
