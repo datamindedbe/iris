@@ -9,3 +9,6 @@ gradlew.bat
 .idea
 .DS_Store
 *rabbit@*
+target
+venv
+*.iml
