@@ -15,6 +15,8 @@ tasks:
       mkdir 2_workflows/airflow/workspace/mount/logs 2_workflows/airflow/workspace/mount/plugins
       sudo chmod -R 777 2_workflows/airflow/workspace
       sudo chmod -R 777 2_workflows/rabbitmq/workspace
+      mkdir 4_apache_storm/storm-supervisor/logs
+      sudo chmod -R 777 apache_storm
       wget https://dlcdn.apache.org/kafka/3.1.0/kafka_2.13-3.1.0.tgz -P 3_kafka/cli
       tar -xzf 3_kafka/cli/kafka_2.13-3.1.0.tgz --directory 3_kafka/cli
       echo 'export PATH="/workspace/iris/3_kafka/cli/kafka_2.13-3.1.0/bin:$PATH"' >> ~/.bashrc
