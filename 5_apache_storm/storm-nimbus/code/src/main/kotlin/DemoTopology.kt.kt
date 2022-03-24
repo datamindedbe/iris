@@ -38,8 +38,6 @@ object DemoTopology {
 
         val random = RandomNumberSpout()
         builder.setSpout("randomNumberSpout", random)
-
-
         val filtering: FilteringBolt = FilteringBolt()
         builder.setBolt("filteringBolt", filtering)
             .shuffleGrouping("randomNumberSpout")
@@ -63,10 +61,9 @@ object DemoTopology {
                 BaseWindowedBolt.Duration(5, TimeUnit.SECONDS)
             )
 
-        builder.setBolt("joinBolt", joinBolt, 1)
+        builder.setBolt("joinBolt", joinBolt, 1).setNumTasks(4)
             .fieldsGrouping("aggregatingBolt1", Fields("key"))
             .fieldsGrouping("aggregatingBolt2", Fields("key"))
-
 
         val filePath = "/data/output.txt"
         val file = FileWritingBolt(filePath)
