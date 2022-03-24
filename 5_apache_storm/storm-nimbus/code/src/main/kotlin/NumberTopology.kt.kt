@@ -59,7 +59,6 @@ object NumberTopology {
                     .build()
             ), 1
         )
-
         val kafkanumberBolt: KafkaNumberBolt = KafkaNumberBolt()
         builder.setBolt("kafka_number_bolt", kafkanumberBolt)
             .shuffleGrouping("kafka_spout")
@@ -69,11 +68,7 @@ object NumberTopology {
             .shuffleGrouping("kafka_number_bolt")
 
         val aggregating1: BaseWindowedBolt? = AggregatingBolt()
-//            .withTimestampField("timestamp")
             .withTumblingWindow(BaseWindowedBolt.Duration(5, TimeUnit.SECONDS))
-//            .withLag(BaseWindowedBolt.Duration.seconds(1))
-//            .withWindow(BaseWindowedBolt.Duration.seconds(5))
-
         builder.setBolt("aggregatingBolt1", aggregating1)
             .shuffleGrouping("filteringBolt")
 
@@ -129,7 +124,7 @@ object NumberTopology {
         // Turn on debugging mode.
         conf.setDebug(true)
 
-        conf.setNumWorkers(3)
+        conf.setNumWorkers(1)
         StormSubmitter.submitTopology("number-topology", conf, builder.createTopology())
     }
 
